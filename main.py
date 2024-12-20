@@ -4,7 +4,6 @@ from fpdf import FPDF
 from pathlib import Path
 
 filepaths = glob.glob("Invoices/*.xlsx")
-print(filepaths)
 
 for file in filepaths:
     df  = pd.read_excel(file, sheet_name = "Sheet 1")
@@ -43,6 +42,18 @@ for file in filepaths:
         PDF.cell(w=30, h=8, txt=str(row["amount_purchased"]), border=1)
         PDF.cell(w=30, h=8, txt=str(row["price_per_unit"]),border=1)
         PDF.cell(w=30, h=8, txt=str(row["total_price"]),border=1, ln=1)
+
+    total_sum = df["total_price"].sum()
+    PDF.set_font(family="Times", size=10)
+    PDF.set_text_color(80, 80, 80)
+    PDF.cell(w=30, h=8, txt="", border=1)
+    PDF.cell(w=70, h=8, txt="", border=1)
+    PDF.cell(w=30, h=8, txt="", border=1)
+    PDF.cell(w=30, h=8, txt="", border=1)
+    PDF.cell(w=30, h=8, txt=str(total_sum), border=1, ln=1)
+
+    PDF.set_font(family="Times", size=10)
+    PDF.cell(w=30, h=8, txt=f"The total price is {total_sum}", ln=1)
 
     PDF.output(f"pdf/{filename}.pdf")
 
